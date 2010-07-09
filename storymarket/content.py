@@ -7,7 +7,7 @@ from __future__ import absolute_import
 from . import base
 from .schemes import PricingScheme, RightsScheme
 from .orgs import Org
-from .categories import Subcategory
+from .categories import Category
 
 class User(base.Resource):
     """
@@ -46,7 +46,7 @@ class ContentResource(base.Resource):
         raise NotImplementedError # TODO
 
     author          = base.related_resource(User, 'author')
-    category        = base.related_resource(Subcategory, 'category')
+    category        = base.related_resource(Category, 'category')
     org             = base.related_resource(Org, 'org')
     pricing_scheme  = base.related_resource(PricingScheme, 'pricing_scheme')
     rights_scheme   = base.related_resource(RightsScheme, 'rights_scheme')
@@ -69,20 +69,21 @@ class ContentManager(base.Manager):
         """
         return self._list('/content/%s/' % self.urlbit)
         
-    def get(self):
+    def get(self, resource):
         """
         Get a single content resource of this type.
         
+        :param resource: The resource instance or its ID.
         :rtype: An instance of an apropriate ``ContentResource`` subclass
                 (e.g. ``Audio``, ``Video``, etc.)
         """
-        return self._get('/content/%s/%s/' % (self.urlbit, id))
+        return self._get('/content/%s/%s/' % (self.urlbit, base.getid(resource)))
     
     def delete(self, resource):
         """
         Delete a resource of this type.
         
-        :param resource: The resource class or its ID.
+        :param resource: The resource instance or its ID.
         :rtype: None
         """
         return self._delete('/content/%s/%s/' % (self.urlbit, base.getid(resource)))
@@ -101,7 +102,7 @@ class ContentManager(base.Manager):
         """
         Update an existing resource.
         
-        :param resource: The resource class or its ID.
+        :param resource: The resource instance or its ID.
         :rtype: None
         """
         url = '/content/%s/%s/' % (self.urlbit, base.getid(resource))
@@ -138,30 +139,49 @@ class BinaryContentManager(ContentManager):
         """
         raise NotImplementedError # TODO
 
-class Audio(BinaryContentResource): pass
-class Data(BinaryContentResource): pass
-class Photo(BinaryContentResource): pass
-class Text(ContentResource): pass
-class Video(BinaryContentResource): pass
+class Audio(BinaryContentResource):
+    "An audio resource."
+    pass
+    
+class Data(BinaryContentResource): 
+    "A data resource."
+    pass
+    
+class Photo(BinaryContentResource):
+    "A photo resource."
+    pass
+
+class Text(ContentResource):
+    "A text resource."
+    pass
+    
+class Video(BinaryContentResource):
+    "A video resource."
+    pass
 
 # TODO: packages
 
 class AudioManager(BinaryContentManager):
+    "Manager for audio resources."
     resource_class = Audio
     urlbit = 'audio'
     
 class DataManager(BinaryContentManager):
+    "Manager for data resources."
     resource_class = Data
     urlbit = 'data'
     
 class PhotoManager(BinaryContentManager):
+    "Manager for photo resources."
     resource_class = Photo
     urlbit = 'photo'
 
 class TextManager(ContentManager):
+    "Manager for text resources."
     resource_class = Text
     urlbit = 'text'
 
 class VideoManager(BinaryContentManager):
+    "Manager for video resources."
     resource_class = Video
     urlbit = 'video'
