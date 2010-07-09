@@ -1,7 +1,7 @@
 Python bindings to the Storymarket API
 ======================================
 
-This is a cloud for the `Storymarket API <XXX>`_.
+This is a client for the `Storymarket API <XXX>`_.
 
 You'll need a Storymarket account to use this library, and you'll need to
 generate an API token by visiting the 
