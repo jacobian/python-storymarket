@@ -3,10 +3,12 @@ from __future__ import absolute_import
 __version__ = '1.0'
 
 from .client import StorymarketClient
-from .categories import CategoryManager, SubcategoryManager
-from .content import AudioManager, DataManager, PhotoManager, TextManager, VideoManager
-from .orgs import OrgManager
-from .schemes import PricingSchemeManager, RightsSchemeManager
+from .categories import Category, CategoryManager, SubcategoryManager
+from .content import (Audio, Data, Photo, Text, Video, AudioManager,
+                      DataManager, PhotoManager, TextManager, VideoManager)
+from .orgs import Org, OrgManager
+from .schemes import (PricingScheme, RightsScheme, PricingSchemeManager,
+                      RightsSchemeManager)
 
 class Storymarket(object):
     """
