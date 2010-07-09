@@ -28,6 +28,8 @@ class FakeStorymarket(Storymarket):
             assert_equal(self.client.callstack[-1][2], body)
 
 class FakeClient(StorymarketClient):
+    BASE_URL = ''
+
     def __init__(self):
         self.apikey = 'apikey'
         self.callstack = []
@@ -55,50 +57,50 @@ class FakeClient(StorymarketClient):
         return httplib2.Response({"status": status}), body
     
     def get_content_category(self, **kw):
-        return [self.get_content_category_1()]
+        return (200, [self.get_content_category_1()[1]])
     
     def get_content_category_1(self, **kw):
-        return {
+        return (200, {
             "name": "Technology", 
             "links": [], # FIXME
             "description": "Tech!"
-        },
+        })
     
     get_content_sub_category = get_content_category
     get_content_sub_category_1 = get_content_category_1
     
     def get_content_data(self, **kw):
-        return [self.get_content_data_1()]
+        return (200, [self.get_content_data_1()[1]])
         
     def get_content_data_1(self, **kw):
-        return self._content_dict(title='Data',
-                                  data='http://example.com/datas/2010/05/14/revsys.ppt')
+        return (200, self._content_dict(title='Data',
+                                        data='http://example.com/datas/2010/05/14/revsys.ppt'))
     
     def get_content_audio(self, **kw):
-        return [self.get_content_audio_1()]
+        return (200, [self.get_content_audio_1()[1]])
         
     def get_content_audio_1(self, **kw):
-        return self._content_dict(title='Audio',
-                                  audio="http://example.com/audios/2010/05/14/revsys.avi")
+        return (200, self._content_dict(title='Audio',
+                                        audio="http://example.com/audios/2010/05/14/revsys.avi"))
     
     def get_orgs(self, **kw):
-        return [self.get_orgs_1()]
+        return (200, [self.get_orgs_1()[1]])
     
     def get_orgs_1(self, **kw):
-        return {"name": "Test Org", "links": []}        
+        return (200, {"name": "Test Org", "links": []})
     
     def get_content_photo(self, **kw):
-        return [self.get_content_photo_1()]
+        return (200, [self.get_content_photo_1()[1]])
         
     def get_content_photo_1(self, **kw):
-        return self._content_dict(title='Photo',
-                                  photo='http://eample.com/photos/2010/05/15/cat.jpg')
+        return (200, self._content_dict(title='Photo',
+                                  photo='http://eample.com/photos/2010/05/15/cat.jpg'))
     
     def get_pricing(self, **kw):
-        return [self.get_pricing_1()]
+        return (200, [self.get_pricing_1()[1]])
         
     def get_pricing_1(self, **kw):
-        return {
+        return (200, {
             "default_for_audio": False, 
             "default_for_data": False, 
             "name": "Default Pricing", 
@@ -116,13 +118,13 @@ class FakeClient(StorymarketClient):
             "default_for_photo": False, 
             "group_prices": [], 
             "description": ""
-        }
+        })
     
     def get_rights(self, **kw):
-        return [self.get_rights_1()]
+        return (200, [self.get_rights_1()[1]])
         
     def get_rights_1(self, **kw):
-        return {
+        return (200, {
             "other_limitations": "", 
             "name": "Public", 
             "links": [],
@@ -137,20 +139,20 @@ class FakeClient(StorymarketClient):
             "excluded_states": [], 
             "public": True, 
             "description": ""
-        }, 
+        })
     
     def get_content_text(self, **kw):
-        return [self.get_content_text_1()]
+        return (200, [self.get_content_text_1()[1]])
     
     def get_content_text_1(self, **kw):
-        return self._content_dict(title='Text', content='lorum ipsum...')
+        return (200, self._content_dict(title='Text', content='lorum ipsum...'))
     
     def get_content_video(self, **kw):
-        return [self.get_content_video_1()]
+        return (200, [self.get_content_video_1()[1]])
         
     def get_content_video_1(self, **kw):
-        return self._content_dict(title='Video',
-                                  photo='http://eample.com/photos/2010/05/15/cat.mov')
+        return (200, self._content_dict(title='Video',
+                                        photo='http://eample.com/photos/2010/05/15/cat.mov'))
     
     def _content_dict(self, **kw):
         """Helper to generate content objects"""
