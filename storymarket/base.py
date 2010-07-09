@@ -1,7 +1,6 @@
 """
 Base utilities to build API operation managers and objects on top of.
 """
-
 class Manager(object):
     """
     Managers interact with a particular type of resource and provide CRUD
@@ -12,19 +11,27 @@ class Manager(object):
     def __init__(self, api):
         self.api = api
 
-    def _list(self, url, response_key):
+    def _list(self, url, response_key=None):
         resp, body = self.api.client.get(url)
         if body:
-            return [self.resource_class(self, res) for res in body[response_key]]
+            if response_key: 
+                body = (res[response_key] for res in body)
+            return [self.resource_class(self, res) for res in body]
         return body
     
-    def _get(self, url, response_key):
+    def _get(self, url, response_key=None):
         resp, body = self.api.client.get(url)
-        return self.resource_class(self, body[response_key])
+        if response_key:
+            return self.resource_class(self, body[response_key])
+        else:
+            return self.resource_class(self, self.body)
     
-    def _create(self, url, body, response_key):
+    def _create(self, url, body, response_key=None):
         resp, body = self.api.client.post(url, body=body)
-        return self.resource_class(self, body[response_key])
+        if response_key:
+            return self.resource_class(self, body[response_key])
+        else:
+            return self.resource_class(self, self.body)
         
     def _delete(self, url):
         resp, body = self.api.client.delete(url)
@@ -69,3 +76,49 @@ class Resource(object):
         if hasattr(self, 'id') and hasattr(other, 'id'):
             return self.id == other.id
         return self._info == other._info
+        
+def related_resource(cls, keyname):
+    """
+    Helper to create properties that access other Resource instances from a
+    sub-dict on the resource.
+    
+    For example, if a ``Book`` resource returned data of the form::
+    
+        {
+            'title': 'The Sun Also Rises',
+            'author': {
+                'first': 'Ernest',
+                'last': 'Hemingway'
+            }
+        }
+        
+    You could make ``Book.author`` into a property that returned ``Author``
+    resources thusly::
+    
+        class Book(Resource):
+            ...
+            
+            author = related_resource(Author, 'author')
+    
+    This is just syntactic sugar for::
+    
+        class Book(Resource):
+            ...
+            
+            @property
+            def author(self):
+                return Author(self.manager, self._info['author'])
+    """
+    def getter(self):
+        return cls(self.manager, self._info['author'])
+    return property(getter)
+    
+def getid(obj):
+    """
+    Abstracts the common pattern of allowing both an object or an object's ID
+    (integer) as a parameter when dealing with relationships.
+    """
+    try:
+        return obj.id
+    except AttributeError:
+        return int(obj)
