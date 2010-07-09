@@ -13,7 +13,7 @@ class PricingScheme(base.Resource):
     def __repr__(self):
         return "<PricingScheme: %s>" % self.name
         
-class PricingSchemeManager(base.Resource):
+class PricingSchemeManager(base.Manager):
     resource_class = PricingScheme
     
     def all(self):
@@ -40,7 +40,7 @@ class RightsScheme(base.Resource):
     def __repr__(self):
         return "<RightsScheme: %s>" % self.name
         
-class RightsSchemeManager(base.Resource):
+class RightsSchemeManager(base.Manager):
     resource_class = RightsScheme
     
     def all(self):

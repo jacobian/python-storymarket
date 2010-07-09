@@ -13,7 +13,7 @@ class Category(base.Resource):
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.name)
         
-class CategoryManager(base.Resource):
+class CategoryManager(base.Manager):
     """
     Manage categories.
     """

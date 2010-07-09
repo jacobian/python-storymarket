@@ -10,7 +10,7 @@ class Org(base.Resource):
     def __repr__(self):
         return "<Org: %s>" % self.name
         
-class OrgManager(base.Resource):
+class OrgManager(base.Manager):
     resource_class = Org
 
     def all(self):
