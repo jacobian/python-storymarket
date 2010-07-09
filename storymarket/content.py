@@ -95,6 +95,7 @@ class ContentManager(base.Manager):
         :param resource: The resource to create (as a class or dict)
         :rtype: The created resource class.
         """
+        # FIXME: use the simplified PUT/POST representation
         body = getattr(resource, '_info', resource)
         return self._create('/content/%s/' % self.urlbit, body)
         
@@ -105,6 +106,7 @@ class ContentManager(base.Manager):
         :param resource: The resource instance or its ID.
         :rtype: None
         """
+        # FIXME: use the simplified PUT/POST representation
         url = '/content/%s/%s/' % (self.urlbit, base.getid(resource))
         body = getattr(resource, '_info', resource)
         return self._update(url, body)
