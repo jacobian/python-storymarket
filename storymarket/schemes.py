@@ -24,13 +24,14 @@ class PricingSchemeManager(base.Resource):
         """
         return self._list('/pricing/')
         
-    def get(self, id):
+    def get(self, resource):
         """
         Get an individual pricing scheme.
-        
-        :rtype: a :class:`PricingScheme` resource.
+
+        :param resource: The pricing scheme instance or its ID.
+        :rtype: A list of pricing scheme instances.
         """
-        return self._get('/pricing/%s/' % id)
+        return self._get('/pricing/%s/' % (self.urlbit, base.getid(resource)))
         
 class RightsScheme(base.Resource):
     """
@@ -50,10 +51,12 @@ class RightsSchemeManager(base.Resource):
         """
         return self._list('/rights/')
         
-    def get(self, id):
+    def get(self, resource):
         """
         Get an individual rights scheme.
-        
-        :rtype: a :class:`RightsScheme` resource.
+
+        :param resource: The rights scheme instance or its ID.
+        :rtype: A list of rights scheme instances.
         """
-        return self._get('/rights/%s/' % id)
+        return self._get('/rights/%s/' % (self.urlbit, base.getid(resource)))
+
