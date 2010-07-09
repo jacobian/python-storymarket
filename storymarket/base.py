@@ -109,6 +109,7 @@ def related_resource(cls, keyname):
             def author(self):
                 return Author(self.manager, self._info['author'])
     """
+    # FIXME: self.manager is wrong - should be the resource class's manager.
     def getter(self):
         return cls(self.manager, self._info['author'])
     return property(getter)
