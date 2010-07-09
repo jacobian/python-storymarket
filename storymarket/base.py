@@ -24,14 +24,14 @@ class Manager(object):
         if response_key:
             return self.resource_class(self, body[response_key])
         else:
-            return self.resource_class(self, self.body)
+            return self.resource_class(self, body)
     
     def _create(self, url, body, response_key=None):
         resp, body = self.api.client.post(url, body=body)
         if response_key:
             return self.resource_class(self, body[response_key])
         else:
-            return self.resource_class(self, self.body)
+            return self.resource_class(self, body)
         
     def _delete(self, url):
         resp, body = self.api.client.delete(url)
