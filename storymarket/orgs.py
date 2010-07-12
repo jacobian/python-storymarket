@@ -28,4 +28,4 @@ class OrgManager(base.Manager):
         :param resource: The org instance or its ID.
         :rtype: A list of org instances.
         """
-        return self._get('/orgs/%s/' % (self.urlbit, base.getid(resource)))
+        return self._get('/orgs/%s/' % base.getid(resource))
