@@ -189,7 +189,7 @@ class BinaryContentResource(ContentResource):
         :param blob: A string of file-like object to upload.
         :rtype: None
         """
-        self.manager.upload_blog(self, blob)
+        self.manager.upload_blob(self, blob)
 
 class BinaryContentManager(ContentManager):
     """
