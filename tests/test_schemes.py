@@ -1,9 +1,8 @@
 from __future__ import absolute_import
 
-from nose.tools import assert_raises, assert_equal
 from storymarket import PricingScheme, RightsScheme
 from .fakeserver import FakeStorymarket
-from .utils import assert_isinstance, assert_list_api, assert_get_api
+from .utils import assert_list_api, assert_get_api
 
 sm = FakeStorymarket()
 
