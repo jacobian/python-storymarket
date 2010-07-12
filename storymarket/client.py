@@ -31,7 +31,7 @@ class StorymarketClient(httplib2.Http):
         
         resp, body = self._storymarket_request(url, method, *args, **kwargs)
         
-        if resp.status in (400, 401, 403, 404, 406, 413, 500):
+        if resp.status in (400, 401, 403, 404, 405, 406, 413, 500):
             raise exceptions.from_response(resp, body)
             
         return resp, body

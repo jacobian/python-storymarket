@@ -4,12 +4,21 @@ import mock
 from nose.tools import assert_equal, assert_not_equal
 from storymarket import (Audio, Data, Photo, Text, Video, Category, Org,
                          PricingScheme, RightsScheme)
-from storymarket.content import User
+from storymarket.content import User, BinaryContentManager
+from StringIO import StringIO
 from .fakeserver import FakeStorymarket
 from .utils import (assert_isinstance, assert_list_api, assert_get_api,
                     assert_delete_api, assert_create_api, assert_update_api)
 
 sm = FakeStorymarket()
+
+# Use a predictable MIME boundary.
+
+BOUNDARY = 'BOUNDARY'
+def setup():
+    BinaryContentManager._multipart_boundary = BOUNDARY
+def teardown():    
+    BinaryContentManager._multipart_boundary = None
 
 def test_content_apis():
     test_data = [
@@ -51,7 +60,7 @@ def test_content_apis():
         yield assert_create_api, sm, manager.create, instance, post_data, list_url
         yield assert_update_api, sm, manager.update, instance, post_data, detail_url
         yield assert_instance_save, instance, manager
-        
+
 def test_related_resource_properties():
     test_data = [
         ('author', User),
@@ -69,6 +78,36 @@ def test_related_resource_properties():
 
     for (attname, cls) in test_data:
         yield check_related_resource_property, attname, cls
+
+def test_blob_uploads():
+    test_data = [
+        (sm.audio, 'audio'),
+        (sm.data, 'data'),
+        (sm.photos, 'photo'),
+        (sm.video, 'video')
+    ]
+
+    new_data = 'not really binary data'
+    
+    def check_blob_upload(manager, urlbit, data):
+        resource = manager.get(1)
+        expected_body = (
+            '--%s\r\n' % BOUNDARY +
+            'Content-Disposition: form-data; name="blob"\r\n' +
+            'Content-Type: text/plain; charset=utf-8\r\n' +
+            'Content-Length: %s\r\n' % len(new_data) +
+            '\r\n%s\r\n' % new_data +
+            '--%s--\r\n' % BOUNDARY
+        )
+        
+        # Try with
+        resource.upload_blob(data)
+        sm.assert_called('PUT', 'content/%s/1/blob/' % urlbit, body=expected_body)
+    
+    for (manager, urlbit) in test_data:
+        # Check with both a string object and a fike-like object.
+        yield check_blob_upload, manager, urlbit, new_data
+        yield check_blob_upload, manager, urlbit, StringIO(new_data)
 
 def test_user_eq():
     u1 = User({'username': 'u1', 'first_name': 'u', 'last_name': '1', 'email': '1@example.org'})

@@ -228,6 +228,19 @@ class FakeClient(StorymarketClient):
         self._check_post_method(kw['body'])
         return (200, None)
     
+    def _blob_put(self, **kw):
+        assert_in('body', kw)
+        assert_in('headers', kw)
+        headers = kw['headers']
+        assert headers['Content-Type'].startswith('multipart/form-data')
+        assert_in('Content-Length', headers)
+        return (204, None)
+
+    put_content_photo_1_blob = _blob_put
+    put_content_audio_1_blob = _blob_put
+    put_content_video_1_blob = _blob_put
+    put_content_data_1_blob = _blob_put
+    
     def _content_dict(self, **kw):
         """Helper to generate content objects"""
         d = {

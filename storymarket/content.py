@@ -4,6 +4,7 @@ API classes for content (text, data, autdio, video, packages) resources.
 
 from __future__ import absolute_import
 
+import poster.encode
 from . import base
 from .schemes import PricingScheme, RightsScheme
 from .orgs import Org
@@ -197,6 +198,10 @@ class BinaryContentManager(ContentManager):
     content (Audio, Video, etc.).
     """
     
+    # An injection point so that tests can generate a predictable MIME boundary.
+    # End-user code should never touch this.
+    _multipart_boundary = None
+    
     def upload_blob(self, resource, blob):
         """
         Upload a new blob for a given resource.
@@ -205,7 +210,11 @@ class BinaryContentManager(ContentManager):
         :param blob: A string of file-like object to upload.
         :rtype: None
         """
-        raise NotImplementedError # TODO
+        url = '/content/%s/%s/blob/' % (self.urlbit, base.getid(resource))
+        datagen, headers = poster.encode.multipart_encode({'blob': blob}, self._multipart_boundary)
+        # poster sets the Content-Length header to an int, breaking httplib2.
+        headers['Content-Length'] = str(headers['Content-Length'])
+        return self.api.client.put(url, body="".join(datagen), headers=headers)
 
 class Audio(BinaryContentResource):
     "An audio resource."
