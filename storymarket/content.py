@@ -16,10 +16,6 @@ class User(base.Resource):
     Not actually a resource, but used in lieu of the raw dict of user info.
     """
     def __init__(self, info):
-        # Make sure User(some_other_user) works
-        if isinstance(info, self.__class__):
-            info = info.__dict__
-        
         self.username = info['username']
         self.first_name = info['first_name']
         self.last_name = info['last_name']
@@ -58,7 +54,7 @@ class ContentResource(base.Resource):
 
     @property
     def pricing_scheme(self):
-        return PricingScheme(self.manager.api.pricing, self._pricing)
+        return PricingScheme(self.manager.api.pricing, self._pricing_scheme)
 
     @property
     def rights_scheme(self):
