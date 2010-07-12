@@ -6,57 +6,44 @@ from __future__ import absolute_import
 
 from . import base
 
-class PricingScheme(base.Resource):
+class BaseSchemeResource(base.Resource):
+    def __repr__(self):
+        return "<%s: %s>" % (self.__class__.__name__, self.name)
+
+class PricingScheme(BaseSchemeResource):
     """
     A pricing scheme for content.
     """
-    def __repr__(self):
-        return "<PricingScheme: %s>" % self.name
-        
-class PricingSchemeManager(base.Manager):
-    resource_class = PricingScheme
-    
-    def all(self):
-        """
-        Get a list of all pricing schemes.
-        
-        :rtype: list of :class:`PricingScheme`` resources.
-        """
-        return self._list('/pricing/')
-        
-    def get(self, resource):
-        """
-        Get an individual pricing scheme.
+    pass
 
-        :param resource: The pricing scheme instance or its ID.
-        :rtype: A list of pricing scheme instances.
-        """
-        return self._get('/pricing/%s/' % base.getid(resource))
-        
-class RightsScheme(base.Resource):
+class RightsScheme(BaseSchemeResource):
     """
     A rights scheme for content.
     """
-    def __repr__(self):
-        return "<RightsScheme: %s>" % self.name
-        
-class RightsSchemeManager(base.Manager):
-    resource_class = RightsScheme
+    pass
     
+class BaseSchemeManager(base.Manager):
     def all(self):
         """
-        Get a list of all rights schemes.
+        Get a list of all schemes.
         
-        :rtype: list of :class:`RightsScheme`` resources.
+        :rtype: list of scheme resources.
         """
-        return self._list('/rights/')
+        return self._list('/%s/' % self.urlbit)
         
     def get(self, resource):
         """
-        Get an individual rights scheme.
+        Get an individual scheme.
 
-        :param resource: The rights scheme instance or its ID.
-        :rtype: A list of rights scheme instances.
+        :param resource: The scheme instance or its ID.
+        :rtype: A list of scheme instances.
         """
-        return self._get('/rights/%s/' % base.getid(resource))
-
+        return self._get('/%s/%s/' % (self.urlbit, base.getid(resource)))
+   
+class PricingSchemeManager(BaseSchemeManager):
+    resource_class = PricingScheme
+    urlbit = 'pricing'
+        
+class RightsSchemeManager(BaseSchemeManager):
+    resource_class = RightsScheme
+    urlbit = 'rights'
