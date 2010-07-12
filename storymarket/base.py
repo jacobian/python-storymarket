@@ -67,7 +67,8 @@ class Resource(object):
         return "<%s %s>" % (self.__class__.__name__, info)
 
     def get(self):
-        new = self.manager.get(self.id)
+        # Avoid triggering __getattr__ recursively.
+        new = self.manager.get(self.__dict__['id'])
         self._add_details(new._info)
         
     def __eq__(self, other):
@@ -77,43 +78,6 @@ class Resource(object):
             return self.id == other.id
         return self._info == other._info
         
-def related_resource(cls, keyname):
-    """
-    Helper to create properties that access other Resource instances from a
-    sub-dict on the resource.
-    
-    For example, if a ``Book`` resource returned data of the form::
-    
-        {
-            'title': 'The Sun Also Rises',
-            'author': {
-                'first': 'Ernest',
-                'last': 'Hemingway'
-            }
-        }
-        
-    You could make ``Book.author`` into a property that returned ``Author``
-    resources thusly::
-    
-        class Book(Resource):
-            ...
-            
-            author = related_resource(Author, 'author')
-    
-    This is just syntactic sugar for::
-    
-        class Book(Resource):
-            ...
-            
-            @property
-            def author(self):
-                return Author(self.manager, self._info['author'])
-    """
-    # FIXME: self.manager is wrong - should be the resource class's manager.
-    def getter(self):
-        return cls(self.manager, self._info['author'])
-    return property(getter)
-    
 def getid(obj):
     """
     Abstracts the common pattern of allowing both an object or an object's ID

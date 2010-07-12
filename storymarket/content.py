@@ -11,11 +11,20 @@ from .categories import Category
 
 class User(base.Resource):
     """
-    A user resource.
+    A user object.
     
-    Not directly addressable -- hence no manager -- but used as a part of other
-    resources.
+    Not actually a resource, but used in lieu of the raw dict of user info.
     """
+    def __init__(self, info):
+        # Make sure User(some_other_user) works
+        if isinstance(info, self.__class__):
+            info = info.__dict__
+        
+        self.username = info['username']
+        self.first_name = info['first_name']
+        self.last_name = info['last_name']
+        self.email = info['email']
+    
     def __repr__(self):
         return "<User: %s>" % self.username
         
@@ -26,6 +35,39 @@ class ContentResource(base.Resource):
     """
     Abstract base class for content resources.
     """
+    
+    def _add_details(self, info):
+        # So that related objects can be properties, save their info under.
+        # slightly different names.
+        for k in ('author', 'category', 'org', 'pricing_scheme', 'rights_scheme', 'uploaded_by'):
+            if k in info:
+                info['_%s' % k] = info.pop(k)
+        super(ContentResource, self)._add_details(info)
+    
+    @property
+    def author(self):
+        return User(self._author)
+
+    @property
+    def category(self):
+        return Category(self.manager.api.subcategories, self._category)
+
+    @property
+    def org(self):
+        return Org(self.manager.api.orgs, self._org)
+
+    @property
+    def pricing_scheme(self):
+        return PricingScheme(self.manager.api.pricing, self._pricing)
+
+    @property
+    def rights_scheme(self):
+        return RightsScheme(self.manager.api.rights, self._rights_scheme)
+        
+    @property
+    def uploaded_by(self):
+        return User(self._uploaded_by)
+    
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.title)
     
@@ -41,16 +83,9 @@ class ContentResource(base.Resource):
         """
         self.manager.update(self)
 
-    @property
-    def links(self):
-        raise NotImplementedError # TODO
-
-    author          = base.related_resource(User, 'author')
-    category        = base.related_resource(Category, 'category')
-    org             = base.related_resource(Org, 'org')
-    pricing_scheme  = base.related_resource(PricingScheme, 'pricing_scheme')
-    rights_scheme   = base.related_resource(RightsScheme, 'rights_scheme')
-    uploaded_by     = base.related_resource(User, 'uploaded_by')
+    # @property
+    # def links(self):
+    #     raise NotImplementedError # TODO
 
 class ContentManager(base.Manager):
     """

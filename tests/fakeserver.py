@@ -61,6 +61,7 @@ class FakeClient(StorymarketClient):
     
     def get_content_category_1(self, **kw):
         return (200, {
+            "id": 1,
             "name": "Technology", 
             "links": [], # FIXME
             "description": "Tech!"
@@ -101,6 +102,7 @@ class FakeClient(StorymarketClient):
         
     def get_pricing_1(self, **kw):
         return (200, {
+            "id": 1,
             "default_for_audio": False, 
             "default_for_data": False, 
             "name": "Default Pricing", 
@@ -125,6 +127,7 @@ class FakeClient(StorymarketClient):
         
     def get_rights_1(self, **kw):
         return (200, {
+            "id": 1,
             "other_limitations": "", 
             "name": "Public", 
             "links": [],
@@ -157,7 +160,8 @@ class FakeClient(StorymarketClient):
     def _content_dict(self, **kw):
         """Helper to generate content objects"""
         d = {
-            "category": self.get_content_subcategory_1(),
+            "id": 1,
+            "category": self.get_content_sub_category_1()[1],
             "uploaded_by": {
                 "username": "frank", 
                 "first_name": "Frank", 
@@ -178,9 +182,9 @@ class FakeClient(StorymarketClient):
             "tags": ['hi', 'there'], 
             "expire_date": "2011-05-14 14:59:28", 
             "fact_checked": False, 
-            "org": self.get_orgs_1(), 
-            "rights_scheme": self.get_rights_1(),
-            "pricing_scheme": self.get_pricing_1(),
+            "org": self.get_orgs_1()[1], 
+            "rights_scheme": self.get_rights_1()[1],
+            "pricing_scheme": self.get_pricing_1()[1],
             "size": 2123
         }
         d = d.copy()
