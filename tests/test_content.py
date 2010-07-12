@@ -69,4 +69,13 @@ def test_related_resource_properties():
 
     for (attname, cls) in test_data:
         yield check_related_resource_property, attname, cls
-    
+
+def test_user_eq():
+    u1 = User({'username': 'u1', 'first_name': 'u', 'last_name': '1', 'email': '1@example.org'})
+    u2 = User({'username': 'u2', 'first_name': 'u', 'last_name': '2', 'email': '2@example.org'})
+    # Same username as u1, so == to u1.
+    u3 = User({'username': 'u1', 'first_name': 'u', 'last_name': '3', 'email': '3@example.org'})
+
+    assert_equal(u1, u1)
+    assert_not_equal(u1, u2)
+    assert_equal(u1, u3)
