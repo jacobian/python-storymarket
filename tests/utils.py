@@ -115,7 +115,7 @@ def assert_update_api(api, api_method, instance, post_data, expected_url, resour
     api.assert_called('PUT', expected_url)
 
     # PUT an instance and post_data
-    api_method(instance, post_data)
+    api_method(instance, instance)
     api.assert_called('PUT', expected_url)
     
     # PUT just a new instance
