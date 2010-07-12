@@ -36,9 +36,21 @@ class StorymarketClient(httplib2.Http):
         return resp, body
     
     def _storymarket_request(self, url, method, *args, **kwargs):
-        # Separate method for mocking and testing.
+        """Real request method for mocking and testing."""
+        # Encode the body as JSON unless otherwise specified
+        if 'body' in kwargs:
+            ctype = kwargs['headers'].setdefault('Content-Type', 'application/json')
+            if ctype == 'application/json':
+                kwargs['body'] = json.dumps(kwargs['body'])
+
         resp, body = super(StorymarketClient, self).request(url, method, *args, **kwargs)
-        body = json.loads(body) if body else None
+        try:
+            body = json.loads(body) if body else None
+        except ValueError:
+            # Raised by simplejson if the body can't be decoded.
+            # This almost always is accompanied by an error status,
+            # which'll get raised above.
+            pass
         return resp, body
     
     def get(self, url, **kwargs):

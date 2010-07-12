@@ -22,6 +22,6 @@ def from_response(response, body):
     """
     cls = _code_map.get(response.status, StorymarketError)
     if body:
-        return cls(code=response.status, message=body['errors'][0]['message'])
+        return cls(code=response.status, message=body)
     else:
         return cls(code=response.status)

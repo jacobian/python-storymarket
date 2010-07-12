@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 __version__ = '1.0'
 
+from . import exceptions
 from .client import StorymarketClient
 from .categories import Category, CategoryManager, SubcategoryManager
 from .content import (Audio, Data, Photo, Text, Video, AudioManager,
