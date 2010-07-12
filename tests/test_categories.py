@@ -3,33 +3,18 @@ from __future__ import absolute_import
 from nose.tools import assert_raises, assert_equal
 from storymarket import Category
 from .fakeserver import FakeStorymarket
-from .utils import assert_isinstance
+from .utils import assert_isinstance, assert_list_api, assert_get_api
 
 sm = FakeStorymarket()
 
 def test_list_categories():
-    cl = sm.categories.all()
-    sm.assert_called('GET', 'content/category/')
-    [assert_isinstance(c, Category) for c in cl]
+    assert_list_api(sm, sm.categories.all, Category, 'content/category/')
     
 def test_list_subcategories():
-    cl = sm.subcategories.all()
-    sm.assert_called('GET', 'content/sub_category/')
-    [assert_isinstance(c, Category) for c in cl]
+    assert_list_api(sm, sm.subcategories.all, Category, 'content/sub_category/')
     
 def test_get_category():
-    c = sm.categories.get(1)
-    sm.assert_called('GET', 'content/category/1/')
-    assert_isinstance(c, Category)
-    c = sm.categories.get(Category(None, {'id': 1}))
-    sm.assert_called('GET', 'content/category/1/')
-    assert_isinstance(c, Category)
+    assert_get_api(sm, sm.categories.get, Category, 'content/category/1/')
     
 def test_get_subcategory():
-    c = sm.subcategories.get(1)
-    sm.assert_called('GET', 'content/sub_category/1/')
-    assert_isinstance(c, Category)
-    c = sm.subcategories.get(Category(None, {'id': 1}))
-    sm.assert_called('GET', 'content/sub_category/1/')
-    assert_isinstance(c, Category)
-    
+    assert_get_api(sm, sm.subcategories.get, Category, 'content/sub_category/1/')

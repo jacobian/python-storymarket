@@ -3,35 +3,19 @@ from __future__ import absolute_import
 from nose.tools import assert_raises, assert_equal
 from storymarket import PricingScheme, RightsScheme
 from .fakeserver import FakeStorymarket
-from .utils import assert_isinstance
+from .utils import assert_isinstance, assert_list_api, assert_get_api
 
 sm = FakeStorymarket()
 
 def test_list_pricing_schemes():
-    _test_list(PricingScheme, sm.pricing, 'pricing/')
+    assert_list_api(sm, sm.pricing.all, PricingScheme, 'pricing/')
 
 def test_list_rights_schemes():
-    _test_list(RightsScheme, sm.rights, 'rights/')
+    assert_list_api(sm, sm.rights.all, RightsScheme, 'rights/')
 
 def test_get_pricing_scheme():
-    _test_get(PricingScheme, sm.pricing, 'pricing/1/')
+    assert_get_api(sm, sm.pricing.get, PricingScheme, 'pricing/1/')
     
 def test_get_rights_scheme():
-    _test_get(RightsScheme, sm.rights, 'rights/1/')
+    assert_get_api(sm, sm.rights.get, RightsScheme, 'rights/1/')
 
-def _test_list(cls, manager, url):
-    scheme_list = manager.all()
-    sm.assert_called('GET', url)
-    for scheme in scheme_list:
-        assert_isinstance(scheme, cls)
-
-def _test_get(cls, manager, url):
-    # Test get(id)
-    scheme = manager.get(1)
-    sm.assert_called('GET', url)
-    assert_isinstance(scheme, cls)
-
-    # Test get(instance)
-    scheme = manager.get(cls(None, {'id': 1}))
-    sm.assert_called('GET', url)
-    assert_isinstance(scheme, cls)
