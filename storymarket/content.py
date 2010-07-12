@@ -9,7 +9,7 @@ from .schemes import PricingScheme, RightsScheme
 from .orgs import Org
 from .categories import Category
 
-class User(base.Resource):
+class User(object):
     """
     A user object.
     
@@ -91,6 +91,9 @@ class ContentManager(base.Manager):
     # that is: /content/{urlbit}/
     urlbit = None
     
+    # Subclasses should extend this wuth extra fields that need to be flattened.
+    flatten_fields = ['category', 'author', 'title', 'org', 'tags']
+    
     def all(self):
         """
         Get a list of all content resources of this type.
@@ -119,28 +122,60 @@ class ContentManager(base.Manager):
         """
         return self._delete('/content/%s/%s/' % (self.urlbit, base.getid(resource)))
     
-    def create(self, resource):
+    def create(self, data):
         """
         Create a new resource of this type.
         
-        :param resource: The resource to create (as a class or dict)
+        :param data: The data for the object to create. This could be an
+                     instance of the resource class, or a dictionary of
+                     simplified data.
         :rtype: The created resource class.
         """
-        # FIXME: use the simplified PUT/POST representation
-        body = getattr(resource, '_info', resource)
-        return self._create('/content/%s/' % self.urlbit, body)
+        if isinstance(data, self.resource_class):
+            data = self._flatten(data)
+        return self._create('/content/%s/' % self.urlbit, data)
         
-    def update(self, resource):
+    def update(self, resource, data=None):
         """
         Update an existing resource.
         
         :param resource: The resource instance or its ID.
+        :param data: The data to use for updating. This could be an instance of
+                     the resource class, or a dictionary of simplified data, or
+                     None to use the data from the resource instance itself.
         :rtype: None
         """
-        # FIXME: use the simplified PUT/POST representation
         url = '/content/%s/%s/' % (self.urlbit, base.getid(resource))
-        body = getattr(resource, '_info', resource)
-        return self._update(url, body)
+        if isinstance(data, self.resource_class):
+            data = self._flatten(data)
+        elif data is None:
+            data = self._flatten(resource)
+        return self._update(url, data)
+
+    def _flatten(self, resource):
+        """
+        Flatten a resource object into a simplified dict for POST/PUTing.
+        
+        :param resource: The resource instance.
+        :rtype: dict
+        """
+        flattened = {}
+        for field in self.flatten_fields:
+            value = getattr(resource, field, None)
+            
+            # Gross. FIXME
+            if isinstance(value, Org):
+                value = '/orgs/%s/' % value.id
+            elif isinstance(value, Category):
+                value = '/content/sub_category/%s/' % value.id
+            elif isinstance(value, User):
+                value = value.username
+            elif field == 'tags' and value:
+                value = ', '.join(value)
+            
+            # Only serialize the field if it's given.
+            if value: flattened[field] = value
+        return flattened
 
 class BinaryContentResource(ContentResource):
     """
@@ -198,6 +233,7 @@ class AudioManager(BinaryContentManager):
     "Manager for audio resources."
     resource_class = Audio
     urlbit = 'audio'
+    flatten_fields = BinaryContentManager.flatten_fields + ['duration']
     
 class DataManager(BinaryContentManager):
     "Manager for data resources."
@@ -208,13 +244,16 @@ class PhotoManager(BinaryContentManager):
     "Manager for photo resources."
     resource_class = Photo
     urlbit = 'photo'
+    flatten_fields = BinaryContentManager.flatten_fields + ['caption']
 
 class TextManager(ContentManager):
     "Manager for text resources."
     resource_class = Text
     urlbit = 'text'
+    flatten_fields = BinaryContentManager.flatten_fields + ['content']
 
 class VideoManager(BinaryContentManager):
     "Manager for video resources."
     resource_class = Video
     urlbit = 'video'
+    flatten_fields = BinaryContentManager.flatten_fields + ['duration']

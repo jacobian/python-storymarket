@@ -9,7 +9,7 @@ import httplib2
 from storymarket import Storymarket
 from storymarket.client import StorymarketClient
 from nose.tools import assert_equal
-from .utils import fail, assert_in, assert_not_in
+from .utils import fail, assert_in, assert_not_in, assert_has_keys
 
 class FakeStorymarket(Storymarket):
     def __init__(self, apikey=None):
@@ -88,14 +88,15 @@ class FakeClient(StorymarketClient):
         return (200, [self.get_orgs_1()[1]])
     
     def get_orgs_1(self, **kw):
-        return (200, {"name": "Test Org", "links": []})
+        return (200, {"id": 1, "name": "Test Org", "links": []})
     
     def get_content_photo(self, **kw):
         return (200, [self.get_content_photo_1()[1]])
         
     def get_content_photo_1(self, **kw):
         return (200, self._content_dict(title='Photo',
-                                  photo='http://eample.com/photos/2010/05/15/cat.jpg'))
+                                        photo='http://eample.com/photos/2010/05/15/cat.jpg',
+                                        caption='My cat'))
     
     def get_pricing(self, **kw):
         return (200, [self.get_pricing_1()[1]])
@@ -156,6 +157,76 @@ class FakeClient(StorymarketClient):
     def get_content_video_1(self, **kw):
         return (200, self._content_dict(title='Video',
                                         photo='http://eample.com/photos/2010/05/15/cat.mov'))
+    
+    def _delete_method(self, **kw):
+        assert_not_in('body', kw)
+        return (200, None)
+    
+    delete_content_audio_1 = _delete_method
+    delete_content_data_1 = _delete_method
+    delete_content_photo_1 = _delete_method
+    delete_content_text_1 = _delete_method
+    delete_content_video_1 = _delete_method
+    
+    def _check_post_method(self, body, required=(), optional=()):
+        assert_has_keys(body,
+            required = required + ('org', 'category', 'title', ),
+            optional = optional + ('author', 'one_off_author', 'fact_checked',
+                                   'description', 'rights_scheme',
+                                   'pricing_scheme', 'tags')
+        )
+        assert_equal(body['org'], '/orgs/1/')
+        assert_equal(body['category'], '/content/sub_category/1/')
+    
+    def post_content_text(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'], required=('content',))
+        return (201, self.get_content_text_1()[1])
+        
+    def post_content_photo(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'], required=('caption',))
+        return (201, self.get_content_photo_1()[1])
+                                            
+    def post_content_audio(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'], required=('duration',))
+        return (201, self.get_content_audio_1()[1])
+    
+    def post_content_video(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'], required=('duration',))
+        return (201, self.get_content_video_1()[1])
+        
+    def post_content_data(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'])
+        return (201, self.get_content_data_1()[1])
+    
+    def put_content_text_1(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'], required=('content',))
+        return (200, None)
+        
+    def put_content_photo_1(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'], required=('caption',))
+        return (200, None)
+                                            
+    def put_content_audio_1(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'], required=('duration',))
+        return (200, None)
+    
+    def put_content_video_1(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'], required=('duration',))
+        return (200, None)
+        
+    def put_content_data_1(self, **kw):
+        assert_in('body', kw)
+        self._check_post_method(kw['body'])
+        return (200, None)
     
     def _content_dict(self, **kw):
         """Helper to generate content objects"""
