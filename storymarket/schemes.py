@@ -31,7 +31,7 @@ class PricingSchemeManager(base.Manager):
         :param resource: The pricing scheme instance or its ID.
         :rtype: A list of pricing scheme instances.
         """
-        return self._get('/pricing/%s/' % (self.urlbit, base.getid(resource)))
+        return self._get('/pricing/%s/' % base.getid(resource))
         
 class RightsScheme(base.Resource):
     """
@@ -58,5 +58,5 @@ class RightsSchemeManager(base.Manager):
         :param resource: The rights scheme instance or its ID.
         :rtype: A list of rights scheme instances.
         """
-        return self._get('/rights/%s/' % (self.urlbit, base.getid(resource)))
+        return self._get('/rights/%s/' % base.getid(resource))
 
