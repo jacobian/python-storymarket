@@ -11,27 +11,17 @@ class Manager(object):
     def __init__(self, api):
         self.api = api
 
-    def _list(self, url, response_key=None):
+    def _list(self, url):
         resp, body = self.api.client.get(url)
-        if body:
-            if response_key: 
-                body = (res[response_key] for res in body)
-            return [self.resource_class(self, res) for res in body]
-        return body
+        return [self.resource_class(self, res) for res in body]
     
-    def _get(self, url, response_key=None):
+    def _get(self, url):
         resp, body = self.api.client.get(url)
-        if response_key:
-            return self.resource_class(self, body[response_key])
-        else:
-            return self.resource_class(self, body)
+        return self.resource_class(self, body)
     
-    def _create(self, url, body, response_key=None):
+    def _create(self, url, body):
         resp, body = self.api.client.post(url, body=body)
-        if response_key:
-            return self.resource_class(self, body[response_key])
-        else:
-            return self.resource_class(self, body)
+        return self.resource_class(self, body)
         
     def _delete(self, url):
         resp, body = self.api.client.delete(url)

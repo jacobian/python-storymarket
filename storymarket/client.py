@@ -3,9 +3,10 @@ import urlparse
 import urllib
 import storymarket
 from . import exceptions
-try:
+
+try:                                # pragma: no cover
     import json
-except ImportError:
+except ImportError:                 # pragma: no cover
     import simplejson as json
     
 class StorymarketClient(httplib2.Http):
