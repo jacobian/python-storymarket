@@ -63,7 +63,11 @@ class FakeClient(StorymarketClient):
         return (200, {
             "id": 1,
             "name": "Technology", 
-            "links": [], # FIXME
+            "links": [
+                {"rel": "self",
+                 "href": "content/category/1/",
+                 "allowed_methods": ["GET"]},
+            ],
             "description": "Tech!"
         })
     
@@ -74,27 +78,38 @@ class FakeClient(StorymarketClient):
         return (200, [self.get_content_data_1()[1]])
         
     def get_content_data_1(self, **kw):
-        return (200, self._content_dict(title='Data',
+        return (200, self._content_dict("data",
+                                        title='Data',
                                         data='http://example.com/datas/2010/05/14/revsys.ppt'))
     
     def get_content_audio(self, **kw):
         return (200, [self.get_content_audio_1()[1]])
         
     def get_content_audio_1(self, **kw):
-        return (200, self._content_dict(title='Audio',
+        return (200, self._content_dict("audio",
+                                        title='Audio',
                                         audio="http://example.com/audios/2010/05/14/revsys.avi"))
     
     def get_orgs(self, **kw):
         return (200, [self.get_orgs_1()[1]])
     
     def get_orgs_1(self, **kw):
-        return (200, {"id": 1, "name": "Test Org", "links": []})
+        return (200, {
+            "id": 1, 
+            "name": "Test Org", 
+            "links": [
+                {"rel": "self",
+                 "href": "orgs/1/",
+                 "allowed_methods": ["GET"]},
+            ],
+        })
     
     def get_content_photo(self, **kw):
         return (200, [self.get_content_photo_1()[1]])
         
     def get_content_photo_1(self, **kw):
-        return (200, self._content_dict(title='Photo',
+        return (200, self._content_dict("photo",
+                                        title='Photo',
                                         photo='http://eample.com/photos/2010/05/15/cat.jpg',
                                         caption='My cat'))
     
@@ -107,7 +122,11 @@ class FakeClient(StorymarketClient):
             "default_for_audio": False, 
             "default_for_data": False, 
             "name": "Default Pricing", 
-            "links": [],
+            "links": [
+                {"rel": "self",
+                 "href": "pricing/1/",
+                 "allowed_methods": ["GET"]},
+            ],
             "default": True, 
             "org_prices": [], 
             "base_price_small": None, 
@@ -131,7 +150,11 @@ class FakeClient(StorymarketClient):
             "id": 1,
             "other_limitations": "", 
             "name": "Public", 
-            "links": [],
+            "links": [
+                {"rel": "self",
+                 "href": "rights/1/",
+                 "allowed_methods": ["GET"]},
+            ],
             "default": False, 
             "tv_only": False, 
             "online_only": False, 
@@ -149,13 +172,14 @@ class FakeClient(StorymarketClient):
         return (200, [self.get_content_text_1()[1]])
     
     def get_content_text_1(self, **kw):
-        return (200, self._content_dict(title='Text', content='lorum ipsum...'))
+        return (200, self._content_dict("text", title='Text', content='lorum ipsum...'))
     
     def get_content_video(self, **kw):
         return (200, [self.get_content_video_1()[1]])
         
     def get_content_video_1(self, **kw):
-        return (200, self._content_dict(title='Video',
+        return (200, self._content_dict("video",
+                                        title='Video',
                                         photo='http://eample.com/photos/2010/05/15/cat.mov'))
     
     def _delete_method(self, **kw):
@@ -241,7 +265,7 @@ class FakeClient(StorymarketClient):
     put_content_video_1_blob = _blob_put
     put_content_data_1_blob = _blob_put
     
-    def _content_dict(self, **kw):
+    def _content_dict(self, type, **kw):
         """Helper to generate content objects"""
         d = {
             "id": 1,
@@ -253,7 +277,11 @@ class FakeClient(StorymarketClient):
                 "email": "frank@revsys.com"
             }, 
             "description": "", 
-            "links": [], #FIXME
+            "links": [
+                {"rel": "self",
+                 "href": "content/%s/1/" % type,
+                 "allowed_methods": ["GET", "POST", "PUT", "DELETE"]}
+            ],
             "title": "Test resource", 
             "author": {
                 "username": "frank", 
