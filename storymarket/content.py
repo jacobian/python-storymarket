@@ -6,6 +6,7 @@ from __future__ import absolute_import
 
 import poster.encode
 from . import base
+from . import links
 from .schemes import PricingScheme, RightsScheme
 from .orgs import Org
 from .categories import Category
@@ -28,7 +29,7 @@ class User(object):
     def __eq__(self, other):
         return isinstance(other, self.__class__) and self.username == other.username
         
-class ContentResource(base.Resource):
+class ContentResource(links.LinkedResource):
     """
     Abstract base class for content resources.
     """
@@ -79,10 +80,6 @@ class ContentResource(base.Resource):
         Save changes to this resource by PUTing it back to the server.
         """
         self.manager.update(self)
-
-    # @property
-    # def links(self):
-    #     raise NotImplementedError # TODO
 
 class ContentManager(base.Manager):
     """

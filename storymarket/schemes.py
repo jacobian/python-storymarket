@@ -5,8 +5,9 @@ API classes for pricing and rights schemes.
 from __future__ import absolute_import
 
 from . import base
+from . import links
 
-class BaseSchemeResource(base.Resource):
+class BaseSchemeResource(links.LinkedResource):
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.name)
 

@@ -5,8 +5,9 @@ Organizations.
 from __future__ import absolute_import
 
 from . import base
+from . import links
 
-class Org(base.Resource):
+class Org(links.LinkedResource):
     def __repr__(self):
         return "<Org: %s>" % self.name
         

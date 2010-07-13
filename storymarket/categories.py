@@ -5,8 +5,9 @@ API classes for categories and subcategories.
 from __future__ import absolute_import
 
 from . import base
+from . import links
 
-class Category(base.Resource):
+class Category(links.LinkedResource):
     """
     A category or sub-category.
     """
