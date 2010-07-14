@@ -61,14 +61,14 @@ class FakeClient(StorymarketClient):
     
     def get_content_category_1(self, **kw):
         return (200, {
-            "id": 1,
-            "name": "Technology", 
-            "links": [
-                {"rel": "self",
-                 "href": "content/category/1/",
-                 "allowed_methods": ["GET"]},
+            u"id": 1,
+            u"name": u"Technology", 
+            u"links": [
+                {u"rel": u"self",
+                 u"href": u"content/category/1/",
+                 u"allowed_methods": [u"GET"]},
             ],
-            "description": "Tech!"
+            u"description": u"Tech!"
         })
     
     get_content_sub_category = get_content_category
@@ -78,29 +78,29 @@ class FakeClient(StorymarketClient):
         return (200, [self.get_content_data_1()[1]])
         
     def get_content_data_1(self, **kw):
-        return (200, self._content_dict("data",
-                                        title='Data',
-                                        data='http://example.com/datas/2010/05/14/revsys.ppt'))
+        return (200, self._content_dict(u"data",
+                                        title=u'Data',
+                                        data=u'http://example.com/datas/2010/05/14/revsys.ppt'))
     
     def get_content_audio(self, **kw):
         return (200, [self.get_content_audio_1()[1]])
         
     def get_content_audio_1(self, **kw):
-        return (200, self._content_dict("audio",
-                                        title='Audio',
-                                        audio="http://example.com/audios/2010/05/14/revsys.avi"))
+        return (200, self._content_dict(u"audio",
+                                        title=u'Audio',
+                                        audio=u"http://example.com/audios/2010/05/14/revsys.avi"))
     
     def get_orgs(self, **kw):
         return (200, [self.get_orgs_1()[1]])
     
     def get_orgs_1(self, **kw):
         return (200, {
-            "id": 1, 
-            "name": "Test Org", 
-            "links": [
-                {"rel": "self",
-                 "href": "orgs/1/",
-                 "allowed_methods": ["GET"]},
+            u"id": 1, 
+            u"name": u"Test Org", 
+            u"links": [
+                {u"rel": u"self",
+                 u"href": u"orgs/1/",
+                 u"allowed_methods": [u"GET"]},
             ],
         })
     
@@ -110,36 +110,36 @@ class FakeClient(StorymarketClient):
     def get_content_photo_1(self, **kw):
         return (200, self._content_dict("photo",
                                         title='Photo',
-                                        photo='http://eample.com/photos/2010/05/15/cat.jpg',
-                                        caption='My cat'))
+                                        photo=u'http://eample.com/photos/2010/05/15/cat.jpg',
+                                        caption=u'My cat'))
     
     def get_pricing(self, **kw):
         return (200, [self.get_pricing_1()[1]])
         
     def get_pricing_1(self, **kw):
         return (200, {
-            "id": 1,
-            "default_for_audio": False, 
-            "default_for_data": False, 
-            "name": "Default Pricing", 
-            "links": [
-                {"rel": "self",
-                 "href": "pricing/1/",
-                 "allowed_methods": ["GET"]},
+            u"id": 1,
+            u"default_for_audio": False, 
+            u"default_for_data": False, 
+            u"name": u"Default Pricing", 
+            u"links": [
+                {u"rel": u"self",
+                 u"href": u"pricing/1/",
+                 u"allowed_methods": [u"GET"]},
             ],
-            "default": True, 
-            "org_prices": [], 
-            "base_price_small": None, 
-            "default_for_package": False, 
-            "base_price": "10.00", 
-            "base_price_medium": None, 
-            "base_price_large": None, 
-            "default_for_video": False, 
-            "default_for_text": False, 
-            "org": self.get_orgs_1(), 
-            "default_for_photo": False, 
-            "group_prices": [], 
-            "description": ""
+            u"default": True, 
+            u"org_prices": [], 
+            u"base_price_small": None, 
+            u"default_for_package": False, 
+            u"base_price": u"10.00", 
+            u"base_price_medium": None, 
+            u"base_price_large": None, 
+            u"default_for_video": False, 
+            u"default_for_text": False, 
+            u"org": self.get_orgs_1(), 
+            u"default_for_photo": False, 
+            u"group_prices": [], 
+            u"description": u""
         })
     
     def get_rights(self, **kw):
@@ -147,40 +147,40 @@ class FakeClient(StorymarketClient):
         
     def get_rights_1(self, **kw):
         return (200, {
-            "id": 1,
-            "other_limitations": "", 
-            "name": "Public", 
-            "links": [
-                {"rel": "self",
-                 "href": "rights/1/",
-                 "allowed_methods": ["GET"]},
+            u"id": 1,
+            u"other_limitations": u"", 
+            u"name": u"Public", 
+            u"links": [
+                {u"rel": u"self",
+                 u"href": u"rights/1/",
+                 u"allowed_methods": [u"GET"]},
             ],
-            "default": False, 
-            "tv_only": False, 
-            "online_only": False, 
-            "included_states": [], 
-            "print_only": False, 
-            "org": self.get_orgs_1(), 
-            "exclude": True, 
-            "include": False, 
-            "excluded_states": [], 
-            "public": True, 
-            "description": ""
+            u"default": False, 
+            u"tv_only": False, 
+            u"online_only": False, 
+            u"included_states": [], 
+            u"print_only": False, 
+            u"org": self.get_orgs_1(), 
+            u"exclude": True, 
+            u"include": False, 
+            u"excluded_states": [], 
+            u"public": True, 
+            u"description": u""
         })
     
     def get_content_text(self, **kw):
         return (200, [self.get_content_text_1()[1]])
     
     def get_content_text_1(self, **kw):
-        return (200, self._content_dict("text", title='Text', content='lorum ipsum...'))
+        return (200, self._content_dict(u"text", title=u'Text', content=u'lorum ipsum...'))
     
     def get_content_video(self, **kw):
         return (200, [self.get_content_video_1()[1]])
         
     def get_content_video_1(self, **kw):
-        return (200, self._content_dict("video",
-                                        title='Video',
-                                        photo='http://eample.com/photos/2010/05/15/cat.mov'))
+        return (200, self._content_dict(u"video",
+                                        title=u'Video',
+                                        photo=u'http://eample.com/photos/2010/05/15/cat.mov'))
     
     def _delete_method(self, **kw):
         assert_not_in('body', kw)
@@ -268,36 +268,36 @@ class FakeClient(StorymarketClient):
     def _content_dict(self, type, **kw):
         """Helper to generate content objects"""
         d = {
-            "id": 1,
-            "category": self.get_content_sub_category_1()[1],
-            "uploaded_by": {
-                "username": "frank", 
-                "first_name": "Frank", 
-                "last_name": "Wiles", 
-                "email": "frank@revsys.com"
+            u"id": 1,
+            u"category": self.get_content_sub_category_1()[1],
+            u"uploaded_by": {
+                u"username": u"frank", 
+                u"first_name": u"Frank", 
+                u"last_name": u"Wiles", 
+                u"email": u"frank@revsys.com"
             }, 
-            "description": "", 
-            "links": [
-                {"rel": "self",
-                 "href": "content/%s/1/" % type,
-                 "allowed_methods": ["GET", "POST", "PUT", "DELETE"]}
+            u"description": u"", 
+            u"links": [
+                {u"rel": u"self",
+                 u"href": u"content/%s/1/" % type,
+                 u"allowed_methods": [u"GET", u"POST", u"PUT", u"DELETE"]}
             ],
-            "title": "Test resource", 
-            "author": {
-                "username": "frank", 
-                "first_name": "Frank", 
-                "last_name": "Wiles", 
-                "email": "frank@revsys.com"
+            u"title": u"Test resource", 
+            u"author": {
+                u"username": u"frank", 
+                u"first_name": u"Frank", 
+                u"last_name": u"Wiles", 
+                u"email": u"frank@revsys.com"
             }, 
-            "duration": 57,
-            "one_off_author": "", 
-            "tags": ['hi', 'there'], 
-            "expire_date": "2011-05-14 14:59:28", 
-            "fact_checked": False, 
-            "org": self.get_orgs_1()[1], 
-            "rights_scheme": self.get_rights_1()[1],
-            "pricing_scheme": self.get_pricing_1()[1],
-            "size": 2123
+            u"duration": 57,
+            u"one_off_author": u"", 
+            u"tags": [u'hi', u'there'], 
+            u"expire_date": u"2011-05-14 14:59:28", 
+            u"fact_checked": False, 
+            u"org": self.get_orgs_1()[1], 
+            u"rights_scheme": self.get_rights_1()[1],
+            u"pricing_scheme": self.get_pricing_1()[1],
+            u"size": 2123
         }
         d = d.copy()
         d.update(kw)

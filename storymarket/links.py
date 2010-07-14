@@ -12,8 +12,6 @@ class Link(object):
 
     This encapsulates them as an object.
     """
-    
-    # Note the argument names carefully chosen to allow Link(**link_dict).
     def __init__(self, rel, href, allowed_methods):
         self.rel = rel
         self.href = href
@@ -37,6 +35,8 @@ class LinkedResource(base.Resource):
         # it doesn't overwrite our new version..
         self.links = {}
         for link in info.pop('links', []):
-            self.links[link['rel']] = Link(**link)
+            link_obj = Link(rel=link['rel'], href=link['href'],
+                            allowed_methods=link['allowed_methods'])
+            self.links[link['rel']] = link_obj
         super(LinkedResource, self)._add_details(info)
     
