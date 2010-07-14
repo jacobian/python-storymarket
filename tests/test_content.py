@@ -29,11 +29,13 @@ def test_content_apis():
         (sm.video,  Video, 'video', {'duration': '1:00'})
     ]
 
+    # Data carefully constructed so that we've got both a URL and an object
+    # to be uploaded.
     create_update_data = {
         'category': '/content/sub_category/1/',
         'author': 'frank',
         'title': 'Sample API title',
-        'org': '/orgs/1/',
+        'org': sm.orgs.get(1),
         'tags': 'one, two, three'
     }
 

@@ -129,8 +129,7 @@ class ContentManager(base.Manager):
                      simplified data.
         :rtype: The created resource class.
         """
-        if isinstance(data, self.resource_class):
-            data = self._flatten(data)
+        data = self._flatten(data)
         return self._create('/content/%s/' % self.urlbit, data)
         
     def update(self, resource, data=None):
@@ -144,35 +143,43 @@ class ContentManager(base.Manager):
         :rtype: None
         """
         url = '/content/%s/%s/' % (self.urlbit, base.getid(resource))
-        if isinstance(data, self.resource_class):
-            data = self._flatten(data)
-        elif data is None:
-            data = self._flatten(resource)
+        data = self._flatten(data or resource)
         return self._update(url, data)
 
     def _flatten(self, resource):
         """
-        Flatten a resource object into a simplified dict for POST/PUTing.
+        Flatten a resource object or a dict of data into a simplified dict for
+        POST/PUTing.
         
-        :param resource: The resource instance.
+        This takes care of converting sub-objects into simplified URLs or other
+        representations for posting.
+        
+        :param resource: The resource instance or dict of data.
         :rtype: dict
         """
-        flattened = {}
-        for field in self.flatten_fields:
-            value = getattr(resource, field, None)
+        
+        # Convert a Resource object into a dict.
+        if isinstance(resource, self.resource_class):
+            flattened = {}
+            for field in self.flatten_fields:
+                value = getattr(resource, field, None)
+                # Only serialize the field if it's given.
+                if value: 
+                    flattened[field] = value
+        else:
+            flattened = resource.copy()
             
-            # Gross. FIXME
+        # Now convert objects into URLs or other simplified notation.
+        for key, value in flattened.items():
             if isinstance(value, Org):
-                value = '/orgs/%s/' % value.id
+                flattened[key] = '/orgs/%s/' % value.id
             elif isinstance(value, Category):
-                value = '/content/sub_category/%s/' % value.id
+                flattened[key] = '/content/sub_category/%s/' % value.id
             elif isinstance(value, User):
-                value = value.username
-            elif field == 'tags' and value:
-                value = ', '.join(value)
+                flattened[key] = value.username
+            elif key == 'tags' and value:
+                flattened[key] = ', '.join(value)
             
-            # Only serialize the field if it's given.
-            if value: flattened[field] = value
         return flattened
 
 class BinaryContentResource(ContentResource):
