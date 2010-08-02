@@ -7,6 +7,9 @@ class StorymarketError(Exception):
     def __str__(self):
         return "%s (HTTP %s)" % (self.msg, self.code)
 
+class StorymarketObjectDoesNotExist(StorymarketError):
+    http_status = 404
+
 _code_map = dict((c.http_status, c) for c in StorymarketError.__subclasses__())
 
 def from_response(response, body):
