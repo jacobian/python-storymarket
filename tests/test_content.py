@@ -81,6 +81,18 @@ def test_related_resource_properties():
     for (attname, cls) in test_data:
         yield check_related_resource_property, attname, cls
 
+def test_related_resource_properties_when_none():
+    test_properties = ['author', 'category', 'org', 'pricing_scheme',
+                       'rights_scheme', 'uploaded_by']
+    
+    def check_related_resource_property_when_none(attname):
+        resource = sm.audio.get(1)
+        setattr(resource, '_'+attname, None)
+        assert_equal(getattr(resource, attname), None)
+    
+    for prop in test_properties:
+        yield check_related_resource_property_when_none, prop
+
 def test_blob_uploads():
     test_data = [
         (sm.audio, 'audio'),

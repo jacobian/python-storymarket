@@ -44,27 +44,31 @@ class ContentResource(links.LinkedResource):
     
     @property
     def author(self):
-        return User(self._author)
+        return User(self._author) if self._author else None
 
     @property
     def category(self):
-        return Category(self.manager.api.subcategories, self._category)
+        return Category(self.manager.api.subcategories, self._category) \
+            if self._category else None
 
     @property
     def org(self):
-        return Org(self.manager.api.orgs, self._org)
+        return Org(self.manager.api.orgs, self._org) \
+            if self._org else None
 
     @property
     def pricing_scheme(self):
-        return PricingScheme(self.manager.api.pricing, self._pricing_scheme)
+        return PricingScheme(self.manager.api.pricing, self._pricing_scheme) \
+            if self._pricing_scheme else None
 
     @property
     def rights_scheme(self):
-        return RightsScheme(self.manager.api.rights, self._rights_scheme)
+        return RightsScheme(self.manager.api.rights, self._rights_scheme) \
+            if self._rights_scheme else None
         
     @property
     def uploaded_by(self):
-        return User(self._uploaded_by)
+        return User(self._uploaded_by) if self._uploaded_by else None
     
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.title)
