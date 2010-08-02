@@ -172,16 +172,16 @@ class ContentManager(base.Manager):
                     flattened[field] = value
         else:
             flattened = resource.copy()
-            
+        
         # Now convert objects into URLs or other simplified notation.
         for key, value in flattened.items():
-            if isinstance(value, Org):
-                flattened[key] = '/orgs/%s/' % value.id
-            elif isinstance(value, Category):
-                flattened[key] = '/content/sub_category/%s/' % value.id
+            if key == 'org' and not isinstance(value, basestring):
+                flattened[key] = '/orgs/%s/' % base.getid(value)
+            elif key == 'category' and not isinstance(value, basestring):
+                flattened[key] = '/content/sub_category/%s/' % base.getid(value)
             elif isinstance(value, User):
                 flattened[key] = value.username
-            elif key == 'tags' and value:
+            elif key == 'tags' and value and not isinstance(value, basestring):
                 flattened[key] = ', '.join(value)
             
         return flattened
