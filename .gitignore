@@ -3,3 +3,4 @@
 .coverage
 cover/
 dist/
+docs/_build/*

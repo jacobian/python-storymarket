@@ -215,7 +215,7 @@ class BinaryContentManager(ContentManager):
         Upload a new blob for a given resource.
         
         :param resource: The resource object or its ID to upload a blob to.
-        :param blob: A string of file-like object to upload.
+        :param blob: A string or file-like object to upload.
         :rtype: None
         """
         url = '/content/%s/%s/blob/' % (self.urlbit, base.getid(resource))
