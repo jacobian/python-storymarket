@@ -93,14 +93,14 @@ class ContentManager(base.Manager):
     # that is: /content/{urlbit}/
     urlbit = None
     
-    # Subclasses should extend this wuth extra fields that need to be flattened.
+    # Subclasses should extend this with extra fields that need to be flattened.
     flatten_fields = ['category', 'author', 'title', 'org', 'tags']
     
     def all(self):
         """
         Get a list of all content resources of this type.
         
-        :rtype: A list of instances of apropriate ``ContentResource`` subclasses
+        :rtype: A list of instances of appropriate ``ContentResource`` subclasses
                 (e.g. ``Audio``, ``Video``, etc.)
         """
         return self._list('/content/%s/' % self.urlbit)
@@ -110,7 +110,7 @@ class ContentManager(base.Manager):
         Get a single content resource of this type.
         
         :param resource: The resource instance or its ID.
-        :rtype: An instance of an apropriate ``ContentResource`` subclass
+        :rtype: An instance of an appropriate ``ContentResource`` subclass
                 (e.g. ``Audio``, ``Video``, etc.)
         """
         return self._get('/content/%s/%s/' % (self.urlbit, base.getid(resource)))
