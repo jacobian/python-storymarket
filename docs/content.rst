@@ -9,6 +9,11 @@ text_, and video_. This library exposes each as a separate manager and
 content object, but each type is extremely similar -- they only differ in
 the specific content data fields.
 
+.. seealso::
+
+    Storymarket also supports *packages* -- collections of content into
+    groups. See :doc:`packages` for details.
+
 Basic usage
 ===========
 

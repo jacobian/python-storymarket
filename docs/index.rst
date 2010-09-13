@@ -44,6 +44,10 @@ Then call on the :class:`Storymarket` object:
         
         A :class:`VideoManager` - get, create, and update photo content.
     
+    .. attribute:: packages
+    
+        A :class:`PackageManager` - get, create, and update packages of content.
+    
     .. attribute:: categories
         
         A :class:`CategoryManager` - get categories.
@@ -84,6 +88,7 @@ For details, see:
        :maxdepth: 1
        
        content
+       packages
        categories
        orgs
        schemes
