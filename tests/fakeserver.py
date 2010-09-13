@@ -9,7 +9,7 @@ import httplib2
 from storymarket import Storymarket
 from storymarket.client import StorymarketClient
 from nose.tools import assert_equal
-from .utils import fail, assert_in, assert_not_in, assert_has_keys
+from .utils import fail, assert_in, assert_not_in, assert_has_keys, assert_isinstance
 
 class FakeStorymarket(Storymarket):
     def __init__(self, apikey=None):
@@ -251,6 +251,36 @@ class FakeClient(StorymarketClient):
         assert_in('body', kw)
         self._check_post_method(kw['body'])
         return (200, None)
+    
+    def get_content_package(self, **kw):
+        return (200, [self.get_content_package_1()[1]])
+    
+    def get_content_package_1(self, **kw):
+        return (200, self._content_dict('package',
+                        audio_items = [self.get_content_audio_1()[1]],
+                        data_items = [self.get_content_data_1()[1]],
+                        photo_items = [self.get_content_photo_1()[1]],
+                        text_items = [self.get_content_text_1()[1]],
+                        video_items = [self.get_content_video_1()[1]]))
+    
+    def post_content_package(self, **kw):
+        assert_in('body', kw)
+        
+        related_keys = ('audio_items', 'data_items', 'photo_items',
+                        'text_items', 'video_items')
+        self._check_post_method(kw['body'], optional=related_keys)
+        
+        for k in related_keys:
+            if k in kw['body']:
+                related = kw['body'][k]
+                assert_isinstance(related, list)
+                for item in related:
+                    assert item.endswith('/1/') # make sure it's a URL
+        
+        return self.get_content_package_1()
+            
+    def put_content_package_1(self, **kw):
+        return self.post_content_package()
     
     def _blob_put(self, **kw):
         assert_in('body', kw)

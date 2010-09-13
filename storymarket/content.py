@@ -33,11 +33,14 @@ class ContentResource(links.LinkedResource):
     """
     Abstract base class for content resources.
     """
+    # List of key names of related items.
+    _related_keys = ['author', 'category', 'org', 'pricing_scheme',
+                     'rights_scheme', 'uploaded_by']
     
     def _add_details(self, info):
         # So that related objects can be properties, save their info under.
         # slightly different names.
-        for k in ('author', 'category', 'org', 'pricing_scheme', 'rights_scheme', 'uploaded_by'):
+        for k in self._related_keys:
             if k in info:
                 info['_%s' % k] = info.pop(k)
         super(ContentResource, self)._add_details(info)

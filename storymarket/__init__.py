@@ -8,6 +8,7 @@ from .categories import Category, CategoryManager, SubcategoryManager
 from .content import (Audio, Data, Photo, Text, Video, AudioManager,
                       DataManager, PhotoManager, TextManager, VideoManager)
 from .orgs import Org, OrgManager
+from .packages import Package, PackageManager
 from .schemes import (PricingScheme, RightsScheme, PricingSchemeManager,
                       RightsSchemeManager)
 
@@ -32,6 +33,7 @@ class Storymarket(object):
         self.categories = CategoryManager(self)
         self.data = DataManager(self)
         self.orgs = OrgManager(self)
+        self.packages = PackageManager(self)
         self.photos = PhotoManager(self)
         self.pricing = PricingSchemeManager(self)
         self.rights = RightsSchemeManager(self)
