@@ -11,7 +11,7 @@ if sys.version_info <= (2,6):
 
 setup(
     name = "python-storymarket",
-    version = "1.0b2",
+    version = "1.0b3",
     description = "Client library for the Storymarket",
     long_description = read('README.rst'),
     url = 'http://packages.python.org/python-storymarket',

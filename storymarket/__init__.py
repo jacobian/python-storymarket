@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-__version__ = '1.0b2'
+__version__ = '1.0b3'
 
 from . import exceptions
 from .client import StorymarketClient
