@@ -182,6 +182,10 @@ class ContentManager(base.Manager):
                 flattened[key] = '/orgs/%s/' % base.getid(value)
             elif key == 'category' and not isinstance(value, basestring):
                 flattened[key] = '/content/sub_category/%s/' % base.getid(value)
+            elif key == 'pricing_scheme' and not isinstance(value, basestring):
+                flattened[key] = '/pricing/%s/' % base.getid(value)
+            elif key == 'rights_scheme' and not isinstance(value, basestring):
+                flattened[key] = '/rights/%s/' % base.getid(value)
             elif isinstance(value, User):
                 flattened[key] = value.username
             elif key == 'tags' and value and not isinstance(value, basestring):

@@ -29,14 +29,16 @@ def test_content_apis():
         (sm.video,  Video, 'video', {'duration': '1:00'})
     ]
 
-    # Data carefully constructed so that we've got both a URL and an object
-    # to be uploaded.
+    # Data carefully constructed so that we've got both URLs and objects
+    # for related data.
     create_update_data = {
         'category': '/content/sub_category/1/',
         'author': 'frank',
         'title': 'Sample API title',
         'org': sm.orgs.get(1),
-        'tags': 'one, two, three'
+        'tags': 'one, two, three',
+        'rights_scheme': 1,
+        'pricing_scheme': sm.pricing.get(1),
     }
 
     def assert_instance_delete(instance, manager):
