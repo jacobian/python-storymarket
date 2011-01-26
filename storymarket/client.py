@@ -45,13 +45,20 @@ class StorymarketClient(httplib2.Http):
                 kwargs['body'] = json.dumps(kwargs['body'])
 
         resp, body = super(StorymarketClient, self).request(url, method, *args, **kwargs)
-        try:
-            body = json.loads(body) if body else None
-        except ValueError:
-            # Raised by simplejson if the body can't be decoded.
-            # This almost always is accompanied by an error status,
-            # which'll get raised above.
-            pass
+
+        # Automatically decode the response body from JSON. We can't do this
+        # unconditionally: if there's a redirect chain then self.request() may
+        # have been called more than once recursively and may have already
+        # decoded the response body. So we have to do a nasty isinstance().
+        if isinstance(body, basestring):
+            try:
+                body = json.loads(body) if body else None
+            except ValueError:
+                # Raised by simplejson if the body can't be decoded.
+                # This will be accompanied by an error status, which'll get 
+                # raised by request(), above, so skip it.
+                pass
+
         return resp, body
     
     def get(self, url, **kwargs):
