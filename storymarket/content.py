@@ -274,7 +274,7 @@ class TextManager(ContentManager):
     "Manager for text resources."
     resource_class = Text
     urlbit = 'text'
-    flatten_fields = BinaryContentManager.flatten_fields + ['content']
+    flatten_fields = ContentManager.flatten_fields + ['content']
 
 class VideoManager(BinaryContentManager):
     "Manager for video resources."
