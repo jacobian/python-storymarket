@@ -12,7 +12,7 @@ except ImportError:                 # pragma: no cover
 class StorymarketClient(httplib2.Http):
     
     USER_AGENT = 'python-storymarket/%s' % storymarket.__version__
-    BASE_URL = 'http://storymarket.com/api/v1/'
+    BASE_URL = 'https://www.storymarket.com/api/v1/'
     
     def __init__(self, apikey):
         super(StorymarketClient, self).__init__()
