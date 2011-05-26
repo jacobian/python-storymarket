@@ -9,8 +9,14 @@ sm = FakeStorymarket()
 def test_list_subtypes():
     assert_list_api(sm, sm.sub_types.all, Subtype, 'content/sub_type/')
     
-def test_filter_subtype():
-    assert_list_api(sm, sm.sub_types.filter, Subtype, 'content/sub_type/?')
+def test_filter_subtype_default():
+    assert_list_api(sm, sm.sub_types.filter, Subtype, 'content/sub_type/?is_default=1', {'is_default':True})
+
+def test_filter_subtype_nondefault():
+    assert_list_api(sm, sm.sub_types.filter, Subtype, 'content/sub_type/?is_default=0', {'is_default':False})
+
+def test_filter_subtype_type():
+    assert_list_api(sm, sm.sub_types.filter, Subtype, 'content/sub_type/?type__model=text', {'type':'text'})
 
 def test_get_subtype():
     assert_get_api(sm, sm.sub_types.get, Subtype, 'content/sub_type/1/')

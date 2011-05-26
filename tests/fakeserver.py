@@ -6,6 +6,7 @@ from __future__ import with_statement
 from __future__ import absolute_import
 
 import httplib2
+from urlparse import parse_qsl
 from storymarket import Storymarket
 from storymarket.client import StorymarketClient
 from nose.tools import assert_equal
@@ -45,7 +46,12 @@ class FakeClient(StorymarketClient):
         assert_equal(kwargs['headers']['Authorization'], self.apikey)
         
         # Call the method
-        munged_url = url.strip('/').replace('/', '_').replace('.', '_').replace('?','filter')
+        munged_url = url.strip('/').replace('/', '_').replace('.', '_').split('_?')[0]
+        print munged_url
+        qs = url.split('?')[-1]
+        url_args = dict(parse_qsl(qs))
+        kwargs.update(url_args)
+        
         callback = "%s_%s" % (method.lower(), munged_url)
         if not hasattr(self, callback):
             fail('Called unknown API method: %s %s' % (method, url))
@@ -75,9 +81,6 @@ class FakeClient(StorymarketClient):
     get_content_sub_category_1 = get_content_category_1
 
     def get_content_sub_type(self, **kw):
-        return (200, [self.get_content_sub_type_proto()[1]])
-
-    def get_content_sub_type_filter(self, **kw):
         return (200, [self.get_content_sub_type_proto()[1]])
 
     def get_content_sub_type_proto(self, type_model='text', id=1, **kw):
