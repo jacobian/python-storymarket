@@ -112,7 +112,6 @@ def test_blob_uploads():
             '--%s\r\n' % BOUNDARY +
             'Content-Disposition: form-data; name="blob"\r\n' +
             'Content-Type: text/plain; charset=utf-8\r\n' +
-            #'Content-Length: %s\r\n' % len(new_data) +
             '\r\n%s\r\n' % new_data +
             '--%s--\r\n' % BOUNDARY
         )
