@@ -30,15 +30,24 @@ class SubtypeManager(base.Manager):
         """
         return self._list('/content/%s/' % self.urlbit)
 
-    def filter(self, *args, **kwargs):
+    def filter(self, type=None, is_default=None):
         """
         Get a list of subtypes filtered by content type.
 
-        :param type__model: (optional) Filters by content type name, eg: 'text','photo','video', ecc.
+        :param type: (optional) Filters by content type name, eg: 'text','photo','video', ecc.
         :param is_default: (optional) (Bool): Filters by is_default attribute.
         :rtype: A list of subtype instances.
         """
-        return self._list('/content/%s/?%s' % (self.urlbit, urlencode(kwargs)))
+        params = {}
+        if type is not None:
+            params.update(type__model=type)
+        if is_default is not None:
+            if is_default:
+                is_default_coerced = 1
+            else:
+                is_default_coerced = 0
+            params.update(is_default=is_default_coerced)
+        return self._list('/content/%s/?%s' % (self.urlbit, urlencode(params)))
 
     def get(self, resource):
         """
