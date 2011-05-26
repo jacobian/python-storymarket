@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import mock
 from nose.tools import assert_equal, assert_not_equal
-from storymarket import (Audio, Data, Photo, Text, Video, Category, Org,
+from storymarket import (Audio, Data, Photo, Text, Video, Category, Subtype, Org,
                          PricingScheme, RightsScheme)
 from storymarket.content import User, BinaryContentManager
 from StringIO import StringIO
@@ -69,6 +69,7 @@ def test_related_resource_properties():
     test_data = [
         ('author', User),
         ('category', Category),
+        ('sub_type', Subtype),
         ('org', Org),
         ('pricing_scheme', PricingScheme),
         ('rights_scheme', RightsScheme),
@@ -111,7 +112,7 @@ def test_blob_uploads():
             '--%s\r\n' % BOUNDARY +
             'Content-Disposition: form-data; name="blob"\r\n' +
             'Content-Type: text/plain; charset=utf-8\r\n' +
-            'Content-Length: %s\r\n' % len(new_data) +
+            #'Content-Length: %s\r\n' % len(new_data) +
             '\r\n%s\r\n' % new_data +
             '--%s--\r\n' % BOUNDARY
         )

@@ -94,7 +94,8 @@ specific to each type are then listed next to that type.
                     ``tags``, ``title``         ``fact_checked``,
                                                 ``one_off_author``,
                                                 ``pricing_scheme``,
-                                                ``rights_scheme``
+                                                ``rights_scheme``,
+                                                ``sub_type``
     
     Audio                                       ``duration``, ``expire_date``
     
@@ -166,6 +167,7 @@ Audio
    .. attribute:: audio
    .. attribute:: author
    .. attribute:: category
+   .. attribute:: sub_type
    .. attribute:: description
    .. attribute:: duration
    .. attribute:: expire_date
@@ -190,6 +192,7 @@ Data
    
    .. attribute:: author
    .. attribute:: category
+   .. attribute:: sub_type
    .. attribute:: data
    .. attribute:: description
    .. attribute:: duration
@@ -216,6 +219,7 @@ Photos
    .. attribute:: author
    .. attribute:: caption
    .. attribute:: category
+   .. attribute:: sub_type
    .. attribute:: description
    .. attribute:: duration
    .. attribute:: expire_date
@@ -241,6 +245,7 @@ Text
       
    .. attribute:: author
    .. attribute:: category
+   .. attribute:: sub_type
    .. attribute:: content
    .. attribute:: data
    .. attribute:: description
@@ -268,6 +273,7 @@ Video
    
    .. attribute:: author
    .. attribute:: category
+   .. attribute:: sub_type
    .. attribute:: description
    .. attribute:: duration
    .. attribute:: expire_date

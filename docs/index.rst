@@ -55,6 +55,10 @@ Then call on the :class:`Storymarket` object:
     .. attribute:: subcategories
         
         A :class:`SubcategoryManager` - get subcategories.
+
+    .. attribute:: sub_type
+
+        A :class:`SubtypeManager` - get subtypes.
     
     .. attribute:: orgs
         

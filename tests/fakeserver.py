@@ -45,7 +45,7 @@ class FakeClient(StorymarketClient):
         assert_equal(kwargs['headers']['Authorization'], self.apikey)
         
         # Call the method
-        munged_url = url.strip('/').replace('/', '_').replace('.', '_')
+        munged_url = url.strip('/').replace('/', '_').replace('.', '_').replace('?','filter')
         callback = "%s_%s" % (method.lower(), munged_url)
         if not hasattr(self, callback):
             fail('Called unknown API method: %s %s' % (method, url))
@@ -73,7 +73,40 @@ class FakeClient(StorymarketClient):
     
     get_content_sub_category = get_content_category
     get_content_sub_category_1 = get_content_category_1
-    
+
+    def get_content_sub_type(self, **kw):
+        return (200, [self.get_content_sub_type_proto()[1]])
+
+    def get_content_sub_type_filter(self, **kw):
+        return (200, [self.get_content_sub_type_proto()[1]])
+
+    def get_content_sub_type_proto(self, type_model='text', id=1, **kw):
+        return (200, {
+            u"id": 1,
+            u"name": type_model.title(), 
+            u"is_default": True,
+            u"links": [
+                {u"rel": u"self",
+                 u"href": u"content/sub_type/%d/" % id,
+                 u"allowed_methods": [u"GET"]},
+            ],
+        })
+
+    def get_content_sub_type_1(self, **kw):
+        return self.get_content_sub_type_proto(type_model='text', id=1)
+
+    def get_content_sub_type_2(self, **kw):
+        return self.get_content_sub_type_proto(type_model='photo', id=2)
+
+    def get_content_sub_type_3(self, **kw):
+        return self.get_content_sub_type_proto(type_model='audio', id=3)
+
+    def get_content_sub_type_4(self, **kw):
+        return self.get_content_sub_type_proto(type_model='video', id=4)
+
+    def get_content_sub_type_5(self, **kw):
+        return self.get_content_sub_type_proto(type_model='data', id=5)
+
     def get_content_data(self, **kw):
         return (200, [self.get_content_data_1()[1]])
         
@@ -195,7 +228,7 @@ class FakeClient(StorymarketClient):
     def _check_post_method(self, body, required=(), optional=()):
         assert_has_keys(body,
             required = required + ('org', 'category', 'title', ),
-            optional = optional + ('author', 'one_off_author', 'fact_checked',
+            optional = optional + ('author', 'sub_type', 'one_off_author', 'fact_checked',
                                    'description', 'rights_scheme',
                                    'pricing_scheme', 'tags')
         )
@@ -300,6 +333,7 @@ class FakeClient(StorymarketClient):
         d = {
             u"id": 1,
             u"category": self.get_content_sub_category_1()[1],
+            u"sub_type": self.get_content_sub_type_proto(type_model='text')[1],
             u"uploaded_by": {
                 u"username": u"frank", 
                 u"first_name": u"Frank", 
