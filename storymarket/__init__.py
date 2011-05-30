@@ -5,6 +5,7 @@ __version__ = '1.0b3'
 from . import exceptions
 from .client import StorymarketClient
 from .categories import Category, CategoryManager, SubcategoryManager
+from .subtypes import Subtype, SubtypeManager
 from .content import (Audio, Data, Photo, Text, Video, AudioManager,
                       DataManager, PhotoManager, TextManager, VideoManager)
 from .orgs import Org, OrgManager
@@ -31,6 +32,7 @@ class Storymarket(object):
         self.client = StorymarketClient(key)
         self.audio = AudioManager(self)
         self.categories = CategoryManager(self)
+        self.sub_types = SubtypeManager(self)
         self.data = DataManager(self)
         self.orgs = OrgManager(self)
         self.packages = PackageManager(self)

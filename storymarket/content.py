@@ -10,6 +10,7 @@ from . import links
 from .schemes import PricingScheme, RightsScheme
 from .orgs import Org
 from .categories import Category
+from .subtypes import Subtype
 
 class User(object):
     """
@@ -34,7 +35,7 @@ class ContentResource(links.LinkedResource):
     Abstract base class for content resources.
     """
     # List of key names of related items.
-    _related_keys = ['author', 'category', 'org', 'pricing_scheme',
+    _related_keys = ['author', 'sub_type', 'category', 'org', 'pricing_scheme',
                      'rights_scheme', 'uploaded_by']
     
     def _add_details(self, info):
@@ -53,6 +54,11 @@ class ContentResource(links.LinkedResource):
     def category(self):
         return Category(self.manager.api.subcategories, self._category) \
             if self._category else None
+
+    @property
+    def sub_type(self):
+        return Subtype(self.manager.api.sub_types, self._sub_type) \
+            if self._sub_type else None
 
     @property
     def org(self):
@@ -97,7 +103,7 @@ class ContentManager(base.Manager):
     urlbit = None
     
     # Subclasses should extend this with extra fields that need to be flattened.
-    flatten_fields = ['category', 'author', 'title', 'org', 'tags']
+    flatten_fields = ['category', 'sub_type', 'author', 'title', 'org', 'tags']
     
     def all(self):
         """
@@ -182,6 +188,8 @@ class ContentManager(base.Manager):
                 flattened[key] = '/orgs/%s/' % base.getid(value)
             elif key == 'category' and not isinstance(value, basestring):
                 flattened[key] = '/content/sub_category/%s/' % base.getid(value)
+            elif key == 'sub_type' and not isinstance(value, basestring):
+                flattened[key] = '/content/sub_type/%s/' % base.getid(value)
             elif key == 'pricing_scheme' and not isinstance(value, basestring):
                 flattened[key] = '/pricing/%s/' % base.getid(value)
             elif key == 'rights_scheme' and not isinstance(value, basestring):

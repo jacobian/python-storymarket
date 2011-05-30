@@ -23,7 +23,7 @@ def assert_has_keys(dict, required=[], optional=[]):
 def assert_isinstance(thing, kls):
     ok_(isinstance(thing, kls), "%s is not an instance of %s" % (thing, kls))
     
-def assert_list_api(api, api_method, expected_class, expected_url):
+def assert_list_api(api, api_method, expected_class, expected_url, kw={}):
     """
     Call an API list method, asserting that the returned class is correct
     and that the called URL was correct.
@@ -33,7 +33,7 @@ def assert_list_api(api, api_method, expected_class, expected_url):
     :param expected_class: Assert that returned instances are of this class.
     :param expected_url: Assert that this URL was called with GET.
     """
-    resource_list = api_method()
+    resource_list = api_method(**kw)
     api.assert_called('GET', expected_url)
     for resource in resource_list:
         assert_isinstance(resource, expected_class)
@@ -121,4 +121,3 @@ def assert_update_api(api, api_method, instance, post_data, expected_url, resour
     # PUT just a new instance
     api_method(instance)
     api.assert_called('PUT', expected_url)
-    
